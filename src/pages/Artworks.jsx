@@ -1,50 +1,36 @@
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { getArtworks } from "../api/artwork";
+import ArtworkCard from "../components/artwork/ArtworkCard";
 
 function Artworks() {
-    const [artworks, setArtworks] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState("");
+    const { data, isLoading, isError } = useQuery({
+        queryKey: ["artworks"],
+        queryFn: () => getArtworks().then((response) => response.data),
+    });
 
-    useEffect(() => {
-        const fetchArtworks = async () => {
-            try {
-                const response = await getArtworks();
-                setArtworks(response.data);
-            } catch (error) {
-                console.error(error);
-                setError("Failed to load artworks");
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchArtworks();
-    }, []);
-
-    if (loading) {
+    if (isLoading) {
         return <h1>Loading artworks...</h1>;
     }
 
-    if (error) {
-        return <h1>{error}</h1>;
+    if (isError) {
+        return <h1>Failed to load artworks.</h1>;
     }
 
+    const artworks = data?.data?.artworks || [];
+
     return (
-        <div>
+        <main className="home-page">
             <h1>Artworks</h1>
 
-            {artworks.length === 0 ? (
-                <p>No artworks found.</p>
-            ) : (
-                artworks.map((artwork) => (
-                    <div key={artwork.id}>
-                        <h2>{artwork.title}</h2>
-                        <p>{artwork.description}</p>
-                    </div>
-                ))
-            )}
-        </div>
+            <div className="artwork-grid">
+                {artworks.map((artwork) => (
+                    <ArtworkCard
+                        key={artwork.id}
+                        artwork={artwork}
+                    />
+                ))}
+            </div>
+        </main>
     );
 }
 

@@ -1,51 +1,26 @@
-import { useEffect, useState } from "react";
-import { getArtworks } from "../api/artwork";
+import api from "./axios";
 
-function Artworks() {
-    const [artworks, setArtworks] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState("");
+export const getArtworks = async () => {
+    const response = await api.get("/artworks");
+    return response.data;
+};
 
-    useEffect(() => {
-        const fetchArtworks = async () => {
-            try {
-                const response = await getArtworks();
-                setArtworks(response.data);
-            } catch (error) {
-                console.error(error);
-                setError("Failed to load artworks");
-            } finally {
-                setLoading(false);
-            }
-        };
+export const getArtworkById = (id) => {
+    return api.get(`/artworks/${id}`);
+};
 
-        fetchArtworks();
-    }, []);
+export const createArtwork = (data) => {
+    return api.post("/artworks", data);
+};
 
-    if (loading) {
-        return <h1>Loading artworks...</h1>;
-    }
+export const updateArtwork = (id, data) => {
+    return api.patch(`/artworks/${id}`, data);
+};
 
-    if (error) {
-        return <h1>{error}</h1>;
-    }
+export const deleteArtwork = (id) => {
+    return api.delete(`/artworks/${id}`);
+};
 
-    return (
-        <div>
-            <h1>Artworks</h1>
-
-            {artworks.length === 0 ? (
-                <p>No artworks found.</p>
-            ) : (
-                artworks.map((artwork) => (
-                    <div key={artwork.id}>
-                        <h2>{artwork.title}</h2>
-                        <p>{artwork.description}</p>
-                    </div>
-                ))
-            )}
-        </div>
-    );
-}
-
-export default Artworks;
+export const publishArtwork = (id) => {
+    return api.patch(`/artworks/${id}/publish`);
+};
