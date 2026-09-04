@@ -2,7 +2,7 @@ import ArtworkCard from "../components/artwork/ArtworkCard";
 import { useArtworks } from "../hooks/useArtworks";
 
 const Artworks = () => {
-    const { data, isLoading, isError } = useArtworks();
+    const { data: artworks = [], isLoading, isError } = useArtworks();
 
     if (isLoading) {
         return (
@@ -21,8 +21,6 @@ const Artworks = () => {
             </div>
         );
     }
-
-    const artworks = data?.data?.artworks ?? [];
 
     return (
         <section className="mx-auto max-w-7xl px-6 py-10">

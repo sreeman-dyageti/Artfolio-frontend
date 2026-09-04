@@ -6,7 +6,8 @@ export const useArtworks = () => {
         queryKey: ["artworks"],
         queryFn: async () => {
             const response = await getArtworks();
-            return response.data;
+
+            return response.data?.artworks ?? [];
         },
     });
 };

@@ -2,19 +2,21 @@ import { Link } from "react-router-dom";
 
 const ArtworkCard = ({ artwork }) => {
     return (
-        <article className="artwork-card">
+        <article className="group">
             <Link to={`/artworks/${artwork.id}`}>
                 <img
                     src={artwork.cover_image_url}
                     alt={artwork.title}
-                    className="artwork-card-image"
+                    className="w-full rounded-xl object-cover transition-transform duration-300 group-hover:scale-[1.02]"
                 />
             </Link>
 
-            <div className="artwork-card-content">
-                <h3>{artwork.title}</h3>
+            <div className="px-1 pt-3">
+                <h3 className="font-medium text-gray-900">
+                    {artwork.title}
+                </h3>
 
-                <p>
+                <p className="mt-1 text-sm text-gray-500">
                     by {artwork.display_name || artwork.username}
                 </p>
             </div>
